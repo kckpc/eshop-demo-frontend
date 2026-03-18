@@ -1,22 +1,29 @@
-// Eshop Demo Data Structure
+/**
+ * Eshop 示範數據
+ * 基於 HKACM 音樂商店結構
+ * 系列 → 專輯 → 商品（實體/PDF/MMO）
+ */
 
 export interface Product {
   id: string;
   name: string;
   description: string;
   price: number;
-  type: 'physical' | 'pdf' | 'mmo';
+  type: 'physical' | 'pdf' | 'mmo'; // 實體 | PDF歌譜 | 數碼音檔
+  category: string; // 商品分類
   image: string;
-  category: string;
+  albumId: string;
+  seriesId: string;
 }
 
 export interface Album {
   id: string;
   name: string;
   description: string;
-  seriesId: string;
   image: string;
-  products: Product[];
+  seriesId: string;
+  year: number;
+  songs: string[]; // 歌曲名稱列表
 }
 
 export interface Series {
@@ -24,186 +31,305 @@ export interface Series {
   name: string;
   description: string;
   image: string;
-  albums: Album[];
+  color: string; // 系列主色
 }
 
-// Demo Data
-export const DEMO_SERIES: Series[] = [
+// 系列數據
+export const series: Series[] = [
   {
-    id: 'series-1',
-    name: '時空漫遊',
-    description: '科幻冒險主題系列，探索時間與空間的奧秘',
-    image: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&q=80',
-    albums: [
-      {
-        id: 'album-1-1',
-        name: '《星際旅人的日記》',
-        description: '跨越星系的冒險故事',
-        seriesId: 'series-1',
-        image: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=600&q=80',
-        products: [
-          {
-            id: 'prod-1-1-1',
-            name: '精裝版本（含簽名卡）',
-            description: '限量精裝版，包含作者簽名卡與特殊書籤',
-            price: 299,
-            type: 'physical',
-            image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&q=80',
-            category: '實體商品',
-          },
-          {
-            id: 'prod-1-1-2',
-            name: '豪華禮盒套裝',
-            description: '包含精裝書、周邊海報、貼紙與限量明信片',
-            price: 399,
-            type: 'physical',
-            image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&q=80',
-            category: '實體商品',
-          },
-          {
-            id: 'prod-1-1-3',
-            name: '標準版本',
-            description: '平裝版，經濟實惠的選擇',
-            price: 199,
-            type: 'physical',
-            image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&q=80',
-            category: '實體商品',
-          },
-          {
-            id: 'prod-1-1-4',
-            name: '完整電子書（高清版）',
-            description: '高清 PDF 格式，支持所有設備閱讀',
-            price: 99,
-            type: 'pdf',
-            image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&q=80',
-            category: 'PDF 商品',
-          },
-          {
-            id: 'prod-1-1-5',
-            name: '插圖合集',
-            description: '全書精選插圖高清版本',
-            price: 49,
-            type: 'pdf',
-            image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&q=80',
-            category: 'PDF 商品',
-          },
-          {
-            id: 'prod-1-1-6',
-            name: '虛擬世界通行證（30 天）',
-            description: '進入星際旅人虛擬世界，探索隱藏場景',
-            price: 79,
-            type: 'mmo',
-            image: 'https://images.unsplash.com/photo-1538481143235-5d630a5a7be0?w=400&q=80',
-            category: 'MMO 商品',
-          },
-        ],
-      },
-      {
-        id: 'album-1-2',
-        name: '《未來城市的秘密》',
-        description: '高科技城市中的謎團與冒險',
-        seriesId: 'series-1',
-        image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&q=80',
-        products: [
-          {
-            id: 'prod-1-2-1',
-            name: '精裝版本',
-            description: '精裝版，含特殊封面設計',
-            price: 279,
-            type: 'physical',
-            image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&q=80',
-            category: '實體商品',
-          },
-          {
-            id: 'prod-1-2-2',
-            name: '電子書版本',
-            description: '高清 PDF，即時下載',
-            price: 89,
-            type: 'pdf',
-            image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&q=80',
-            category: 'PDF 商品',
-          },
-          {
-            id: 'prod-1-2-3',
-            name: '角色皮膚包',
-            description: '遊戲內專屬角色皮膚與特效',
-            price: 59,
-            type: 'mmo',
-            image: 'https://images.unsplash.com/photo-1538481143235-5d630a5a7be0?w=400&q=80',
-            category: 'MMO 商品',
-          },
-        ],
-      },
-    ],
+    id: 'worship-praise',
+    name: '敬拜讚美系列',
+    description: '齊唱敬拜讚美系列，獻上最誠摯的敬拜',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    color: 'from-purple-600 to-pink-600',
   },
   {
-    id: 'series-2',
-    name: '靈魂樂章',
-    description: '音樂藝術主題系列，感受靈魂的共鳴',
-    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
-    albums: [
-      {
-        id: 'album-2-1',
-        name: '《心弦共鳴》',
-        description: '音樂與情感的完美結合',
-        seriesId: 'series-2',
-        image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&q=80',
-        products: [
-          {
-            id: 'prod-2-1-1',
-            name: '黑膠唱片版',
-            description: '高保真黑膠唱片，音質卓越',
-            price: 349,
-            type: 'physical',
-            image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&q=80',
-            category: '實體商品',
-          },
-          {
-            id: 'prod-2-1-2',
-            name: '樂譜集',
-            description: '完整樂譜 PDF，適合音樂愛好者',
-            price: 79,
-            type: 'pdf',
-            image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&q=80',
-            category: 'PDF 商品',
-          },
-        ],
-      },
-    ],
+    id: 'spiritual-music',
+    name: '靈修音樂系列',
+    description: '祢愛環繞，心靈歸家的靈修音樂',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    color: 'from-blue-600 to-cyan-600',
   },
   {
-    id: 'series-3',
-    name: '光影詩篇',
-    description: '攝影與視覺藝術主題系列，光影的詩意表達',
-    image: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800&q=80',
-    albums: [
-      {
-        id: 'album-3-1',
-        name: '《晨曦印象》',
-        description: '清晨光影的藝術攝影集',
-        seriesId: 'series-3',
-        image: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=600&q=80',
-        products: [
-          {
-            id: 'prod-3-1-1',
-            name: '精裝攝影集',
-            description: '高質量印刷，100 頁精選攝影作品',
-            price: 399,
-            type: 'physical',
-            image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&q=80',
-            category: '實體商品',
-          },
-          {
-            id: 'prod-3-1-2',
-            name: '高清圖片集 PDF',
-            description: '4K 高清圖片，適合設計師使用',
-            price: 129,
-            type: 'pdf',
-            image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&q=80',
-            category: 'PDF 商品',
-          },
-        ],
-      },
-    ],
+    id: 'childrens-songs',
+    name: '兒歌系列',
+    description: '祈禱仔唱詩歌，兒童敬拜讚美',
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=500&fit=crop',
+    color: 'from-yellow-400 to-orange-500',
   },
 ];
+
+// 專輯數據
+export const albums: Album[] = [
+  // 敬拜讚美系列
+  {
+    id: 'album-1-1',
+    name: '齊唱敬拜讚美16：THE WAY',
+    description: '跨越星系的冒險故事，獻上最誠摯的敬拜',
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=500&fit=crop',
+    seriesId: 'worship-praise',
+    year: 2024,
+    songs: ['THE WAY', '祢是誰', '主，祢知道', '只因愛', '是為了我罪'],
+  },
+  {
+    id: 'album-1-2',
+    name: '《站立得穩》',
+    description: '在信心中站立得穩，經歷主的大能',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    seriesId: 'worship-praise',
+    year: 2023,
+    songs: ['站立得穩', '和平之君', '耶穌恩光', '祢成就救恩'],
+  },
+
+  // 靈修音樂系列
+  {
+    id: 'album-2-1',
+    name: '《祢愛環繞》ACM靈修音樂專輯2',
+    description: '祢愛環繞，靈修音樂帶來心靈的安慰',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    seriesId: 'spiritual-music',
+    year: 2025,
+    songs: ['祢愛環繞', '祢是誰', '主，祢知道', '只因愛', '是為了我罪', '儘管我尚未看見', '和平之君', '耶穌恩光', '祢成就救恩', '耶穌禱文'],
+  },
+  {
+    id: 'album-2-2',
+    name: '《心靈歸家》',
+    description: '在主的懷抱中找到歸家的感覺',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=500&h=500&fit=cropfit=crop',
+    seriesId: 'spiritual-music',
+    year: 2024,
+    songs: ['心靈歸家', '回家', '主的愛', '永恆的家'],
+  },
+
+  // 兒歌系列
+  {
+    id: 'album-3-1',
+    name: '祈禱仔唱詩歌7',
+    description: '兒童敬拜讚美，從小認識主的愛',
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=500&fit=crop',
+    seriesId: 'childrens-songs',
+    year: 2024,
+    songs: ['耶穌愛我', '小小羊', '讚美主', '感謝主'],
+  },
+];
+
+// 商品數據
+export const products: Product[] = [
+  // 敬拜讚美系列 - 齊唱敬拜讚美16：THE WAY
+  {
+    id: 'prod-1-1-1',
+    name: '齊唱敬拜讚美16：THE WAY 概念專輯（收藏版）',
+    description: '精裝版本，包含完整歌譜和簽名卡',
+    price: 250,
+    type: 'physical',
+    category: '實體專輯',
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=500&fit=crop',
+    albumId: 'album-1-1',
+    seriesId: 'worship-praise',
+  },
+  {
+    id: 'prod-1-1-2',
+    name: '齊唱敬拜讚美16：THE WAY 專輯歌譜',
+    description: 'PDF 格式，包含所有歌曲的完整歌譜',
+    price: 80,
+    type: 'pdf',
+    category: 'PDF 歌譜',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop',
+    albumId: 'album-1-1',
+    seriesId: 'worship-praise',
+  },
+  {
+    id: 'prod-1-1-3',
+    name: 'THE WAY 刺繡 T-shirt',
+    description: '限量周邊，高品質刺繡設計',
+    price: 225,
+    type: 'physical',
+    category: '周邊商品',
+    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=500&fit=crop',
+    albumId: 'album-1-1',
+    seriesId: 'worship-praise',
+  },
+  {
+    id: 'prod-1-1-4',
+    name: 'THE WAY 刺繡寬鬆衛衣',
+    description: '舒適寬鬆版型，冬季必備',
+    price: 300,
+    type: 'physical',
+    category: '周邊商品',
+    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500https://images.unsplash.com/photo-1556821552-107d12c0ff7f?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1556821552-107d12c0ff7f?w=500&h=500&fit=cropfit=crop',
+    albumId: 'album-1-1',
+    seriesId: 'worship-praise',
+  },
+
+  // 敬拜讚美系列 - 《站立得穩》
+  {
+    id: 'prod-1-2-1',
+    name: '《站立得穩》專輯',
+    description: '完整專輯，收錄所有歌曲',
+    price: 100,
+    type: 'physical',
+    category: '實體專輯',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    albumId: 'album-1-2',
+    seriesId: 'worship-praise',
+  },
+  {
+    id: 'prod-1-2-2',
+    name: '站立得穩 – 歌譜 PDF',
+    description: '單譜 PDF，高清列印版本',
+    price: 20,
+    type: 'pdf',
+    category: 'PDF 歌譜',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop',
+    albumId: 'album-1-2',
+    seriesId: 'worship-praise',
+  },
+  {
+    id: 'prod-1-2-3',
+    name: '站立得穩 – 音樂下載',
+    description: '數碼版音樂檔案，即時下載',
+    price: 50,
+    type: 'mmo',
+    category: '數碼音檔',
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=500&fit=crop',
+    albumId: 'album-1-2',
+    seriesId: 'worship-praise',
+  },
+
+  // 靈修音樂系列 - 《祢愛環繞》
+  {
+    id: 'prod-2-1-1',
+    name: 'ACM靈修專輯2：《祢愛環繞》',
+    description: '靈修音樂專輯，帶來心靈的安慰',
+    price: 150,
+    type: 'physical',
+    category: '實體專輯',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    albumId: 'album-2-1',
+    seriesId: 'spiritual-music',
+  },
+  {
+    id: 'prod-2-1-2',
+    name: '祢愛環繞 – 詩班譜 PDF',
+    description: '詩班合唱版本，適合團體敬拜',
+    price: 30,
+    type: 'pdf',
+    category: 'PDF 歌譜',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop',
+    albumId: 'album-2-1',
+    seriesId: 'spiritual-music',
+  },
+  {
+    id: 'prod-2-1-3',
+    name: '祢愛環繞 – 伴奏譜 PDF',
+    description: '伴奏版本，適合獨唱或小組',
+    price: 25,
+    type: 'pdf',
+    category: 'PDF 歌譜',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop',
+    albumId: 'album-2-1',
+    seriesId: 'spiritual-music',
+  },
+  {
+    id: 'prod-2-1-4',
+    name: '《祢愛環繞》木製十字架連座',
+    description: '精美周邊，靈修擺飾',
+    price: 100,
+    type: 'physical',
+    category: '周邊商品',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=500&h=500&fit=cropfit=crop',
+    albumId: 'album-2-1',
+    seriesId: 'spiritual-music',
+  },
+  {
+    id: 'prod-2-1-5',
+    name: '祢愛環繞 – 數碼專輯',
+    description: '完整音樂下載，即時享受',
+    price: 80,
+    type: 'mmo',
+    category: '數碼音檔',
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=500&fit=crop',
+    albumId: 'album-2-1',
+    seriesId: 'spiritual-music',
+  },
+
+  // 靈修音樂系列 - 《心靈歸家》
+  {
+    id: 'prod-2-2-1',
+    name: 'ACM靈修音樂《心靈歸家》專輯',
+    description: '溫暖靈修音樂，找到心靈的家',
+    price: 100,
+    type: 'physical',
+    category: '實體專輯',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    albumId: 'album-2-2',
+    seriesId: 'spiritual-music',
+  },
+  {
+    id: 'prod-2-2-2',
+    name: '心靈歸家 – 歌譜 PDF',
+    description: '完整歌譜集合',
+    price: 20,
+    type: 'pdf',
+    category: 'PDF 歌譜',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop',
+    albumId: 'album-2-2',
+    seriesId: 'spiritual-music',
+  },
+
+  // 兒歌系列 - 祈禱仔唱詩歌7
+  {
+    id: 'prod-3-1-1',
+    name: '祈禱仔唱詩歌7 歌書及下載碼套裝',
+    description: '實體歌書 + 數碼音樂下載碼',
+    price: 280,
+    type: 'physical',
+    category: '實體專輯',
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=500&fit=crop',
+    albumId: 'album-3-1',
+    seriesId: 'childrens-songs',
+  },
+  {
+    id: 'prod-3-1-2',
+    name: '祈禱仔唱詩歌7 – 歌譜 PDF',
+    description: '兒童歌譜，易於學習',
+    price: 15,
+    type: 'pdf',
+    category: 'PDF 歌譜',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop',
+    albumId: 'album-3-1',
+    seriesId: 'childrens-songs',
+  },
+  {
+    id: 'prod-3-1-3',
+    name: '祈禱仔唱詩歌7 – 音樂下載',
+    description: '兒童敬拜音樂，快樂學習',
+    price: 40,
+    type: 'mmo',
+    category: '數碼音檔',
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=500&fit=crop',
+    albumId: 'album-3-1',
+    seriesId: 'childrens-songs',
+  },
+];
+
+// 輔助函數
+export function getSeriesById(id: string): Series | undefined {
+  return series.find(s => s.id === id);
+}
+
+export function getAlbumsBySeriesId(seriesId: string): Album[] {
+  return albums.filter(a => a.seriesId === seriesId);
+}
+
+export function getProductsByAlbumId(albumId: string): Product[] {
+  return products.filter(p => p.albumId === albumId);
+}
+
+export function getProductsByType(type: 'physical' | 'pdf' | 'mmo'): Product[] {
+  return products.filter(p => p.type === type);
+}
+
+export function getProductsBySeriesId(seriesId: string): Product[] {
+  return products.filter(p => p.seriesId === seriesId);
+}
