@@ -48,14 +48,34 @@ export default function Home() {
       result = result.filter(p => p.category === selectedCategory);
     }
 
-    // 按搜尋查詢篩選
+    // 按搜尋查詢篩選 - 支持多維度搜尋
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      result = result.filter(
-        p =>
+      
+      result = result.filter(p => {
+        const productAlbum = albums.find(a => a.id === p.albumId);
+        
+        // 粗略匹配商品類型
+        const typeMatches = (
+          (p.type.includes('mp3') && query.includes('mp3')) ||
+          (p.type.includes('pdf') && query.includes('pdf')) ||
+          (p.type.includes('mmo') && (query.includes('mmo') || query.includes('伴奏'))) ||
+          (p.type.includes('cd') && query.includes('cd')) ||
+          (p.type.includes('usb') && query.includes('usb')) ||
+          (p.type.includes('merchandise') && query.includes('周邊'))
+        );
+        
+        return (
+          // 按商品名稱搜尋
           p.name.toLowerCase().includes(query) ||
-          p.description.toLowerCase().includes(query)
-      );
+          // 按商品描述搜尋
+          p.description.toLowerCase().includes(query) ||
+          // 按商品類型搜尋（如 MP3、PDF、伴奏）
+          typeMatches ||
+          // 按專輯名稱搜尋
+          (productAlbum && productAlbum.name.toLowerCase().includes(query))
+        );
+      });
     }
 
     return result;
@@ -152,7 +172,7 @@ export default function Home() {
             <Search className="absolute left-4 top-3 text-gray-400 w-5 h-5" />
             <input
               type="text"
-              placeholder="搜尋專輯或歌名..."
+              placeholder="搜尋歌名、商品類型、專輯...（如：MP3、PDF、伴奏、祢是誰）"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-3 bg-slate-700 text-white placeholder-gray-400 rounded-lg border border-slate-600 focus:border-green-500 focus:outline-none transition"
