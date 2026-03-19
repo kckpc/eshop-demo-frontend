@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { series, albums, products, getProductsByAlbumId, getProductsByType } from '@/../../shared/eshop-data';
+import { series, albums, products } from '@/../../shared/eshop-data';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 
@@ -8,15 +8,19 @@ import { Search } from 'lucide-react';
  * Eshop 首頁
  * 設計風格：AGWMM + HKACM 融合
  * 特點：多層級篩選、動畫切換、虛線邊框卡片
+ * 
+ * 商品分類：
+ * - 實體商品（Physical）：CD版本、歌譜書
+ * - 數碼商品（Digital）：PDF歌譜、MP3音檔
  */
 
-type FilterLevel = 'series' | 'album' | 'type';
-type ProductType = 'all' | 'pdf' | 'mp3';
+type FilterLevel = 'series' | 'album' | 'category';
+type ProductCategory = 'all' | 'physical' | 'digital';
 
 export default function Home() {
   const [selectedSeries, setSelectedSeries] = useState<string | null>(null);
   const [selectedAlbum, setSelectedAlbum] = useState<string | null>(null);
-  const [selectedType, setSelectedType] = useState<ProductType>('all');
+  const [selectedCategory, setSelectedCategory] = useState<ProductCategory>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   // 根據選擇篩選專輯
@@ -39,9 +43,9 @@ export default function Home() {
       result = result.filter(p => p.albumId === selectedAlbum);
     }
 
-    // 按商品類型篩選
-    if (selectedType !== 'all') {
-      result = result.filter(p => p.type === selectedType);
+    // 按商品分類篩選
+    if (selectedCategory !== 'all') {
+      result = result.filter(p => p.category === selectedCategory);
     }
 
     // 按搜尋查詢篩選
@@ -55,14 +59,39 @@ export default function Home() {
     }
 
     return result;
-  }, [selectedSeries, selectedAlbum, selectedType, searchQuery]);
+  }, [selectedSeries, selectedAlbum, selectedCategory, searchQuery]);
 
   // 重置篩選
   const handleReset = () => {
     setSelectedSeries(null);
     setSelectedAlbum(null);
-    setSelectedType('all');
+    setSelectedCategory('all');
     setSearchQuery('');
+  };
+
+  // 獲取商品類型標籤
+  const getProductTypeLabel = (type: string) => {
+    switch (type) {
+      case 'physical-cd':
+        return 'CD版本';
+      case 'physical-score':
+        return '歌譜書';
+      case 'digital-pdf':
+        return 'PDF歌譜';
+      case 'digital-mp3':
+        return 'MP3音檔';
+      default:
+        return type;
+    }
+  };
+
+  // 獲取商品類型顏色
+  const getProductTypeColor = (type: string) => {
+    if (type.startsWith('physical')) {
+      return 'bg-blue-500';
+    } else {
+      return 'bg-green-500';
+    }
   };
 
   return (
@@ -177,15 +206,15 @@ export default function Home() {
             </motion.div>
           )}
 
-          {/* 商品類型篩選 */}
+          {/* 商品分類篩選 */}
           <div>
-            <h3 className="text-white font-semibold mb-3 text-sm uppercase tracking-wider">商品類型</h3>
+            <h3 className="text-white font-semibold mb-3 text-sm uppercase tracking-wider">商品分類</h3>
             <div className="flex flex-wrap gap-3">
               <Button
-                onClick={() => setSelectedType('all')}
-                variant={selectedType === 'all' ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory('all')}
+                variant={selectedCategory === 'all' ? 'default' : 'outline'}
                 className={`${
-                  selectedType === 'all'
+                  selectedCategory === 'all'
                     ? 'bg-purple-500 hover:bg-purple-600 text-white border-purple-500'
                     : 'border-purple-500 text-purple-400 hover:bg-purple-500/10'
                 }`}
@@ -193,32 +222,32 @@ export default function Home() {
                 全部
               </Button>
               <Button
-                onClick={() => setSelectedType('pdf')}
-                variant={selectedType === 'pdf' ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory('physical')}
+                variant={selectedCategory === 'physical' ? 'default' : 'outline'}
                 className={`${
-                  selectedType === 'pdf'
+                  selectedCategory === 'physical'
                     ? 'bg-purple-500 hover:bg-purple-600 text-white border-purple-500'
                     : 'border-purple-500 text-purple-400 hover:bg-purple-500/10'
                 }`}
               >
-                PDF 歌譜
+                實體商品
               </Button>
               <Button
-                onClick={() => setSelectedType('mp3')}
-                variant={selectedType === 'mp3' ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory('digital')}
+                variant={selectedCategory === 'digital' ? 'default' : 'outline'}
                 className={`${
-                  selectedType === 'mp3'
+                  selectedCategory === 'digital'
                     ? 'bg-purple-500 hover:bg-purple-600 text-white border-purple-500'
                     : 'border-purple-500 text-purple-400 hover:bg-purple-500/10'
                 }`}
               >
-                MP3 音檔
+                數碼商品
               </Button>
             </div>
           </div>
 
           {/* 重置按鈕 */}
-          {(selectedSeries || selectedAlbum || selectedType !== 'all' || searchQuery) && (
+          {(selectedSeries || selectedAlbum || selectedCategory !== 'all' || searchQuery) && (
             <Button onClick={handleReset} variant="outline" className="border-red-500 text-red-400 hover:bg-red-500/10">
               清除篩選
             </Button>
@@ -234,7 +263,7 @@ export default function Home() {
         <AnimatePresence mode="wait">
           {filteredProducts.length > 0 ? (
             <motion.div
-              key={`products-${selectedSeries}-${selectedAlbum}-${selectedType}`}
+              key={`products-${selectedSeries}-${selectedAlbum}-${selectedCategory}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -257,9 +286,8 @@ export default function Home() {
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       />
-                      <div className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                        {product.type === 'pdf' && 'PDF'}
-                        {product.type === 'mp3' && 'MP3'}
+                      <div className={`absolute top-3 right-3 ${getProductTypeColor(product.type)} text-white px-3 py-1 rounded-full text-xs font-semibold`}>
+                        {getProductTypeLabel(product.type)}
                       </div>
                     </div>
 
