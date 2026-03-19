@@ -72,14 +72,20 @@ export default function Home() {
   // 獲取商品類型標籤
   const getProductTypeLabel = (type: string) => {
     switch (type) {
-      case 'physical-cd':
+      case 'physical-album-cd':
         return 'CD版本';
-      case 'physical-score':
+      case 'physical-album-usb':
+        return 'USB下載卡';
+      case 'physical-album-card':
+        return '下載卡';
+      case 'physical-score-book':
         return '歌譜書';
+      case 'physical-collection-usb':
+        return '合集USB';
+      case 'physical-collection-pdf':
+        return '合集歌譜書';
       case 'physical-merchandise':
         return '周邊產品';
-      case 'physical-collection':
-        return '合集/USB';
       case 'digital-pdf':
         return 'PDF歌譜';
       case 'digital-mp3':
@@ -94,12 +100,17 @@ export default function Home() {
   // 獲取商品類型顏色
   const getProductTypeColor = (type: string) => {
     switch (type) {
-      case 'physical-cd':
-      case 'physical-score':
+      case 'physical-album-cd':
+      case 'physical-album-usb':
+      case 'physical-album-card':
         return 'bg-blue-500';
-      case 'physical-merchandise':
-      case 'physical-collection':
+      case 'physical-score-book':
+        return 'bg-indigo-500';
+      case 'physical-collection-usb':
+      case 'physical-collection-pdf':
         return 'bg-purple-500';
+      case 'physical-merchandise':
+        return 'bg-rose-500';
       case 'digital-pdf':
         return 'bg-green-500';
       case 'digital-mp3':
