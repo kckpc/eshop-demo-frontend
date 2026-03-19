@@ -282,11 +282,11 @@ albums.forEach((album) => {
       seriesId: album.seriesId,
     });
 
-    // MMO 虛擬商品
+    // MMO 伴奏音樂檔案（Music-only/Minus One）
     products.push({
       id: `prod-${song.id}-mmo`,
-      name: `${song.name} - 虛擬音樂卡`,
-      description: `虛擬音樂卡，可用於音樂應用程式`,
+      name: `${song.name} - 伴奏音樂`,
+      description: `伴奏音樂檔案（只有音樂，無人聲），適合唱歌比賽、練唱、敬拜帶領使用`,
       price: 15,
       type: 'digital-mmo',
       category: 'digital',

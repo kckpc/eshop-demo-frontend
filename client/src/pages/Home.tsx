@@ -85,7 +85,7 @@ export default function Home() {
       case 'digital-mp3':
         return 'MP3音檔';
       case 'digital-mmo':
-        return 'MMO虛擬卡';
+        return '伴奏音樂';
       default:
         return type;
     }
@@ -105,7 +105,7 @@ export default function Home() {
       case 'digital-mp3':
         return 'bg-amber-500';
       case 'digital-mmo':
-        return 'bg-pink-500';
+        return 'bg-orange-500';
       default:
         return 'bg-gray-500';
     }
