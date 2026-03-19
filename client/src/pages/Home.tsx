@@ -11,7 +11,7 @@ import { Search } from 'lucide-react';
  */
 
 type FilterLevel = 'series' | 'album' | 'type';
-type ProductType = 'all' | 'physical' | 'pdf' | 'mmo';
+type ProductType = 'all' | 'pdf' | 'mp3';
 
 export default function Home() {
   const [selectedSeries, setSelectedSeries] = useState<string | null>(null);
@@ -193,17 +193,6 @@ export default function Home() {
                 全部
               </Button>
               <Button
-                onClick={() => setSelectedType('physical')}
-                variant={selectedType === 'physical' ? 'default' : 'outline'}
-                className={`${
-                  selectedType === 'physical'
-                    ? 'bg-purple-500 hover:bg-purple-600 text-white border-purple-500'
-                    : 'border-purple-500 text-purple-400 hover:bg-purple-500/10'
-                }`}
-              >
-                實體商品
-              </Button>
-              <Button
                 onClick={() => setSelectedType('pdf')}
                 variant={selectedType === 'pdf' ? 'default' : 'outline'}
                 className={`${
@@ -215,15 +204,15 @@ export default function Home() {
                 PDF 歌譜
               </Button>
               <Button
-                onClick={() => setSelectedType('mmo')}
-                variant={selectedType === 'mmo' ? 'default' : 'outline'}
+                onClick={() => setSelectedType('mp3')}
+                variant={selectedType === 'mp3' ? 'default' : 'outline'}
                 className={`${
-                  selectedType === 'mmo'
+                  selectedType === 'mp3'
                     ? 'bg-purple-500 hover:bg-purple-600 text-white border-purple-500'
                     : 'border-purple-500 text-purple-400 hover:bg-purple-500/10'
                 }`}
               >
-                數碼音檔
+                MP3 音檔
               </Button>
             </div>
           </div>
@@ -269,9 +258,8 @@ export default function Home() {
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                       />
                       <div className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                        {product.type === 'physical' && '實體'}
                         {product.type === 'pdf' && 'PDF'}
-                        {product.type === 'mmo' && '音檔'}
+                        {product.type === 'mp3' && 'MP3'}
                       </div>
                     </div>
 

@@ -1,17 +1,24 @@
 /**
- * Eshop 示範數據
- * 基於 HKACM 音樂商店結構
- * 系列 → 專輯 → 商品（實體/PDF/MMO）
+ * Eshop 示範數據 - 基於 HKACM 音樂商店結構
+ * 每首歌曲都有 PDF 歌譜和 MP3 音檔兩種商品格式
+ * 系列 → 專輯 → 歌曲 → 商品（PDF/MP3）
  */
+
+export interface Song {
+  id: string;
+  name: string;
+  composer?: string;
+  lyricist?: string;
+}
 
 export interface Product {
   id: string;
   name: string;
   description: string;
   price: number;
-  type: 'physical' | 'pdf' | 'mmo'; // 實體 | PDF歌譜 | 數碼音檔
-  category: string; // 商品分類
+  type: 'pdf' | 'mp3'; // PDF歌譜 | MP3音檔
   image: string;
+  songId: string;
   albumId: string;
   seriesId: string;
 }
@@ -23,7 +30,7 @@ export interface Album {
   image: string;
   seriesId: string;
   year: number;
-  songs: string[]; // 歌曲名稱列表
+  songs: Song[];
 }
 
 export interface Series {
@@ -31,7 +38,7 @@ export interface Series {
   name: string;
   description: string;
   image: string;
-  color: string; // 系列主色
+  color: string;
 }
 
 // 系列數據
@@ -65,20 +72,76 @@ export const albums: Album[] = [
   {
     id: 'album-1-1',
     name: '齊唱敬拜讚美16：THE WAY',
-    description: '跨越星系的冒險故事，獻上最誠摯的敬拜',
+    description: '2024年敬拜讚美新專輯，獻上最誠摯的敬拜',
     image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500&h=500&fit=crop',
     seriesId: 'worship-praise',
     year: 2024,
-    songs: ['THE WAY', '祢是誰', '主，祢知道', '只因愛', '是為了我罪'],
+    songs: [
+      {
+        id: 'song-1-1-1',
+        name: 'THE WAY',
+        composer: '何威廉',
+        lyricist: '李穎茵',
+      },
+      {
+        id: 'song-1-1-2',
+        name: '祢是誰',
+        composer: '陳澔峰',
+        lyricist: '盧永亨',
+      },
+      {
+        id: 'song-1-1-3',
+        name: '主，祢知道',
+        composer: 'Ode Wong',
+        lyricist: 'Glory Cheung',
+      },
+      {
+        id: 'song-1-1-4',
+        name: '只因愛',
+        composer: '古丹青',
+        lyricist: '凌東成',
+      },
+      {
+        id: 'song-1-1-5',
+        name: '是為了我罪',
+        composer: '鄭楚萍',
+        lyricist: '陳芳榮',
+      },
+    ],
   },
   {
     id: 'album-1-2',
     name: '《站立得穩》',
     description: '在信心中站立得穩，經歷主的大能',
-    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=500&h=500&fit=cropfit=crop',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
     seriesId: 'worship-praise',
     year: 2023,
-    songs: ['站立得穩', '和平之君', '耶穌恩光', '祢成就救恩'],
+    songs: [
+      {
+        id: 'song-1-2-1',
+        name: '站立得穩',
+        composer: '李偉倫',
+        lyricist: '黃維棣',
+      },
+      {
+        id: 'song-1-2-2',
+        name: '和平之君',
+        composer: '何威廉',
+        lyricist: '侯碧珮',
+      },
+      {
+        id: 'song-1-2-3',
+        name: '耶穌恩光',
+        composer: '何威廉',
+        lyricist: '侯碧珮',
+      },
+      {
+        id: 'song-1-2-4',
+        name: '祢成就救恩',
+        composer: 'Larry Hung',
+        lyricist: '朱浩廉',
+      },
+    ],
   },
 
   // 靈修音樂系列
@@ -89,7 +152,68 @@ export const albums: Album[] = [
     image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
     seriesId: 'spiritual-music',
     year: 2025,
-    songs: ['祢愛環繞', '祢是誰', '主，祢知道', '只因愛', '是為了我罪', '儘管我尚未看見', '和平之君', '耶穌恩光', '祢成就救恩', '耶穌禱文'],
+    songs: [
+      {
+        id: 'song-2-1-1',
+        name: '祢愛環繞',
+        composer: '陳澔峰',
+        lyricist: '盧永亨',
+      },
+      {
+        id: 'song-2-1-2',
+        name: '祢是誰',
+        composer: '陳澔峰',
+        lyricist: '盧永亨',
+      },
+      {
+        id: 'song-2-1-3',
+        name: '主，祢知道',
+        composer: 'Ode Wong',
+        lyricist: 'Glory Cheung',
+      },
+      {
+        id: 'song-2-1-4',
+        name: '只因愛',
+        composer: '古丹青',
+        lyricist: '凌東成',
+      },
+      {
+        id: 'song-2-1-5',
+        name: '是為了我罪',
+        composer: '鄭楚萍',
+        lyricist: '陳芳榮',
+      },
+      {
+        id: 'song-2-1-6',
+        name: '儘管我尚未看見',
+        composer: 'Alistair Yiu',
+        lyricist: 'Sunset Worship',
+      },
+      {
+        id: 'song-2-1-7',
+        name: '和平之君',
+        composer: '李偉倫',
+        lyricist: '黃維棣',
+      },
+      {
+        id: 'song-2-1-8',
+        name: '耶穌恩光',
+        composer: '何威廉',
+        lyricist: '侯碧珮',
+      },
+      {
+        id: 'song-2-1-9',
+        name: '祢成就救恩',
+        composer: 'Larry Hung',
+        lyricist: '朱浩廉',
+      },
+      {
+        id: 'song-2-1-10',
+        name: '耶穌禱文',
+        composer: '朱浩廉',
+        lyricist: '耶穌禱文',
+      },
+    ],
   },
   {
     id: 'album-2-2',
@@ -98,7 +222,32 @@ export const albums: Album[] = [
     image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
     seriesId: 'spiritual-music',
     year: 2024,
-    songs: ['心靈歸家', '回家', '主的愛', '永恆的家'],
+    songs: [
+      {
+        id: 'song-2-2-1',
+        name: '心靈歸家',
+        composer: '何威廉',
+        lyricist: '李穎茵',
+      },
+      {
+        id: 'song-2-2-2',
+        name: '回家',
+        composer: '陳澔峰',
+        lyricist: '盧永亨',
+      },
+      {
+        id: 'song-2-2-3',
+        name: '主的愛',
+        composer: 'Ode Wong',
+        lyricist: 'Glory Cheung',
+      },
+      {
+        id: 'song-2-2-4',
+        name: '永恆的家',
+        composer: '古丹青',
+        lyricist: '凌東成',
+      },
+    ],
   },
 
   // 兒歌系列
@@ -109,205 +258,349 @@ export const albums: Album[] = [
     image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=500&fit=crop',
     seriesId: 'childrens-songs',
     year: 2024,
-    songs: ['耶穌愛我', '小小羊', '讚美主', '感謝主'],
+    songs: [
+      {
+        id: 'song-3-1-1',
+        name: '耶穌愛我',
+        composer: '何威廉',
+        lyricist: '李穎茵',
+      },
+      {
+        id: 'song-3-1-2',
+        name: '小小羊',
+        composer: '陳澔峰',
+        lyricist: '盧永亨',
+      },
+      {
+        id: 'song-3-1-3',
+        name: '讚美主',
+        composer: 'Ode Wong',
+        lyricist: 'Glory Cheung',
+      },
+      {
+        id: 'song-3-1-4',
+        name: '感謝主',
+        composer: '古丹青',
+        lyricist: '凌東成',
+      },
+    ],
   },
 ];
 
-// 商品數據
+// 商品數據 - 每首歌曲都有 PDF 和 MP3 兩種格式
 export const products: Product[] = [
   // 敬拜讚美系列 - 齊唱敬拜讚美16：THE WAY
+  // THE WAY
   {
-    id: 'prod-1-1-1',
-    name: '齊唱敬拜讚美16：THE WAY 概念專輯（收藏版）',
-    description: '精裝版本，包含完整歌譜和簽名卡',
-    price: 250,
-    type: 'physical',
-    category: '實體專輯',
-    image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500&h=500&fit=crop',
-    albumId: 'album-1-1',
-    seriesId: 'worship-praise',
-  },
-  {
-    id: 'prod-1-1-2',
-    name: '齊唱敬拜讚美16：THE WAY 專輯歌譜',
-    description: 'PDF 格式，包含所有歌曲的完整歌譜',
-    price: 80,
+    id: 'prod-1-1-1-pdf',
+    name: 'THE WAY - 歌譜 PDF',
+    description: 'PDF 格式歌譜，高清列印版本',
+    price: 20,
     type: 'pdf',
-    category: 'PDF 歌譜',
-    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500https://images.unsplash.com/photo-1507838871002-b3d9e41f6520?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1507838871002-b3d9e41f6520?w=500&h=500&fit=cropfit=crop',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    songId: 'song-1-1-1',
     albumId: 'album-1-1',
     seriesId: 'worship-praise',
   },
   {
-    id: 'prod-1-1-3',
-    name: 'THE WAY 刺繡 T-shirt',
-    description: '限量周邊，高品質刺繡設計',
-    price: 225,
-    type: 'physical',
-    category: '周邊商品',
-    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=500&fit=crop',
+    id: 'prod-1-1-1-mp3',
+    name: 'THE WAY - 音樂下載',
+    description: 'MP3 格式音樂檔案，即時下載享受',
+    price: 10,
+    type: 'mp3',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-1-1-1',
+    albumId: 'album-1-1',
+    seriesId: 'worship-praise',
+  },
+
+  // 祢是誰
+  {
+    id: 'prod-1-1-2-pdf',
+    name: '祢是誰 - 歌譜 PDF',
+    description: 'PDF 格式歌譜，高清列印版本',
+    price: 20,
+    type: 'pdf',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    songId: 'song-1-1-2',
     albumId: 'album-1-1',
     seriesId: 'worship-praise',
   },
   {
-    id: 'prod-1-1-4',
-    name: 'THE WAY 刺繡寬鬆衛衣',
-    description: '舒適寬鬆版型，冬季必備',
-    price: 300,
-    type: 'physical',
-    category: '周邊商品',
-    image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500https://images.unsplash.com/photo-1556821552-107d12c0ff7f?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1556821552-107d12c0ff7f?w=500&h=500&fit=cropfit=crop',
+    id: 'prod-1-1-2-mp3',
+    name: '祢是誰 - 音樂下載',
+    description: 'MP3 格式音樂檔案，即時下載享受',
+    price: 10,
+    type: 'mp3',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-1-1-2',
+    albumId: 'album-1-1',
+    seriesId: 'worship-praise',
+  },
+
+  // 主，祢知道
+  {
+    id: 'prod-1-1-3-pdf',
+    name: '主，祢知道 - 歌譜 PDF',
+    description: 'PDF 格式歌譜，高清列印版本',
+    price: 20,
+    type: 'pdf',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    songId: 'song-1-1-3',
+    albumId: 'album-1-1',
+    seriesId: 'worship-praise',
+  },
+  {
+    id: 'prod-1-1-3-mp3',
+    name: '主，祢知道 - 音樂下載',
+    description: 'MP3 格式音樂檔案，即時下載享受',
+    price: 10,
+    type: 'mp3',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-1-1-3',
+    albumId: 'album-1-1',
+    seriesId: 'worship-praise',
+  },
+
+  // 只因愛
+  {
+    id: 'prod-1-1-4-pdf',
+    name: '只因愛 - 歌譜 PDF',
+    description: 'PDF 格式歌譜，高清列印版本',
+    price: 20,
+    type: 'pdf',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    songId: 'song-1-1-4',
+    albumId: 'album-1-1',
+    seriesId: 'worship-praise',
+  },
+  {
+    id: 'prod-1-1-4-mp3',
+    name: '只因愛 - 音樂下載',
+    description: 'MP3 格式音樂檔案，即時下載享受',
+    price: 10,
+    type: 'mp3',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-1-1-4',
+    albumId: 'album-1-1',
+    seriesId: 'worship-praise',
+  },
+
+  // 是為了我罪
+  {
+    id: 'prod-1-1-5-pdf',
+    name: '是為了我罪 - 歌譜 PDF',
+    description: 'PDF 格式歌譜，高清列印版本',
+    price: 20,
+    type: 'pdf',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    songId: 'song-1-1-5',
+    albumId: 'album-1-1',
+    seriesId: 'worship-praise',
+  },
+  {
+    id: 'prod-1-1-5-mp3',
+    name: '是為了我罪 - 音樂下載',
+    description: 'MP3 格式音樂檔案，即時下載享受',
+    price: 10,
+    type: 'mp3',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-1-1-5',
     albumId: 'album-1-1',
     seriesId: 'worship-praise',
   },
 
   // 敬拜讚美系列 - 《站立得穩》
+  // 站立得穩
   {
-    id: 'prod-1-2-1',
-    name: '《站立得穩》專輯',
-    description: '完整專輯，收錄所有歌曲',
-    price: 100,
-    type: 'physical',
-    category: '實體專輯',
-    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=500&h=500&fit=cropfit=crop',
-    albumId: 'album-1-2',
-    seriesId: 'worship-praise',
-  },
-  {
-    id: 'prod-1-2-2',
-    name: '站立得穩 – 歌譜 PDF',
-    description: '單譜 PDF，高清列印版本',
+    id: 'prod-1-2-1-pdf',
+    name: '站立得穩 - 歌譜 PDF',
+    description: 'PDF 格式歌譜，高清列印版本',
     price: 20,
     type: 'pdf',
-    category: 'PDF 歌譜',
-    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500https://images.unsplash.com/photo-1507838871002-b3d9e41f6520?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1507838871002-b3d9e41f6520?w=500&h=500&fit=cropfit=crop',
-    albumId: 'album-1-2',
-    seriesId: 'worship-praise',
-  },
-  {
-    id: 'prod-1-2-3',
-    name: '站立得穩 – 音樂下載',
-    description: '數碼版音樂檔案，即時下載',
-    price: 50,
-    type: 'mmo',
-    category: '數碼音檔',
-    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
-    albumId: 'album-1-2',
-    seriesId: 'worship-praise',
-  },
-
-  // 靈修音樂系列 - 《祢愛環繞》
-  {
-    id: 'prod-2-1-1',
-    name: 'ACM靈修專輯2：《祢愛環繞》',
-    description: '靈修音樂專輯，帶來心靈的安慰',
-    price: 150,
-    type: 'physical',
-    category: '實體專輯',
     image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
-    albumId: 'album-2-1',
-    seriesId: 'spiritual-music',
+    songId: 'song-1-2-1',
+    albumId: 'album-1-2',
+    seriesId: 'worship-praise',
   },
   {
-    id: 'prod-2-1-2',
-    name: '祢愛環繞 – 詩班譜 PDF',
-    description: '詩班合唱版本，適合團體敬拜',
-    price: 30,
-    type: 'pdf',
-    category: 'PDF 歌譜',
-    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500https://images.unsplash.com/photo-1507838871002-b3d9e41f6520?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1507838871002-b3d9e41f6520?w=500&h=500&fit=cropfit=crop',
-    albumId: 'album-2-1',
-    seriesId: 'spiritual-music',
-  },
-  {
-    id: 'prod-2-1-3',
-    name: '祢愛環繞 – 伴奏譜 PDF',
-    description: '伴奏版本，適合獨唱或小組',
-    price: 25,
-    type: 'pdf',
-    category: 'PDF 歌譜',
-    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500https://images.unsplash.com/photo-1507838871002-b3d9e41f6520?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1507838871002-b3d9e41f6520?w=500&h=500&fit=cropfit=crop',
-    albumId: 'album-2-1',
-    seriesId: 'spiritual-music',
-  },
-  {
-    id: 'prod-2-1-4',
-    name: '《祢愛環繞》木製十字架連座',
-    description: '精美周邊，靈修擺飾',
-    price: 100,
-    type: 'physical',
-    category: '周邊商品',
-    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=500&h=500&fit=cropfit=crop',
-    albumId: 'album-2-1',
-    seriesId: 'spiritual-music',
-  },
-  {
-    id: 'prod-2-1-5',
-    name: '祢愛環繞 – 數碼專輯',
-    description: '完整音樂下載，即時享受',
-    price: 80,
-    type: 'mmo',
-    category: '數碼音檔',
+    id: 'prod-1-2-1-mp3',
+    name: '站立得穩 - 音樂下載',
+    description: 'MP3 格式音樂檔案，即時下載享受',
+    price: 10,
+    type: 'mp3',
     image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-1-2-1',
+    albumId: 'album-1-2',
+    seriesId: 'worship-praise',
+  },
+
+  // 和平之君
+  {
+    id: 'prod-1-2-2-pdf',
+    name: '和平之君 - 歌譜 PDF',
+    description: 'PDF 格式歌譜，高清列印版本',
+    price: 20,
+    type: 'pdf',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    songId: 'song-1-2-2',
+    albumId: 'album-1-2',
+    seriesId: 'worship-praise',
+  },
+  {
+    id: 'prod-1-2-2-mp3',
+    name: '和平之君 - 音樂下載',
+    description: 'MP3 格式音樂檔案，即時下載享受',
+    price: 10,
+    type: 'mp3',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-1-2-2',
+    albumId: 'album-1-2',
+    seriesId: 'worship-praise',
+  },
+
+  // 耶穌恩光
+  {
+    id: 'prod-1-2-3-pdf',
+    name: '耶穌恩光 - 歌譜 PDF',
+    description: 'PDF 格式歌譜，高清列印版本',
+    price: 20,
+    type: 'pdf',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    songId: 'song-1-2-3',
+    albumId: 'album-1-2',
+    seriesId: 'worship-praise',
+  },
+  {
+    id: 'prod-1-2-3-mp3',
+    name: '耶穌恩光 - 音樂下載',
+    description: 'MP3 格式音樂檔案，即時下載享受',
+    price: 10,
+    type: 'mp3',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-1-2-3',
+    albumId: 'album-1-2',
+    seriesId: 'worship-praise',
+  },
+
+  // 祢成就救恩
+  {
+    id: 'prod-1-2-4-pdf',
+    name: '祢成就救恩 - 歌譜 PDF',
+    description: 'PDF 格式歌譜，高清列印版本',
+    price: 20,
+    type: 'pdf',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    songId: 'song-1-2-4',
+    albumId: 'album-1-2',
+    seriesId: 'worship-praise',
+  },
+  {
+    id: 'prod-1-2-4-mp3',
+    name: '祢成就救恩 - 音樂下載',
+    description: 'MP3 格式音樂檔案，即時下載享受',
+    price: 10,
+    type: 'mp3',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-1-2-4',
+    albumId: 'album-1-2',
+    seriesId: 'worship-praise',
+  },
+
+  // 靈修音樂系列 - 《祢愛環繞》ACM靈修音樂專輯2
+  // 祢愛環繞
+  {
+    id: 'prod-2-1-1-pdf',
+    name: '祢愛環繞 - 歌譜 PDF',
+    description: 'PDF 格式歌譜，高清列印版本',
+    price: 20,
+    type: 'pdf',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    songId: 'song-2-1-1',
+    albumId: 'album-2-1',
+    seriesId: 'spiritual-music',
+  },
+  {
+    id: 'prod-2-1-1-mp3',
+    name: '祢愛環繞 - 音樂下載',
+    description: 'MP3 格式音樂檔案，即時下載享受',
+    price: 10,
+    type: 'mp3',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-2-1-1',
     albumId: 'album-2-1',
     seriesId: 'spiritual-music',
   },
 
-  // 靈修音樂系列 - 《心靈歸家》
+  // 儘管我尚未看見
   {
-    id: 'prod-2-2-1',
-    name: 'ACM靈修音樂《心靈歸家》專輯',
-    description: '溫暖靈修音樂，找到心靈的家',
-    price: 100,
-    type: 'physical',
-    category: '實體專輯',
-    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
-    albumId: 'album-2-2',
+    id: 'prod-2-1-6-pdf',
+    name: '儘管我尚未看見 - 歌譜 PDF',
+    description: 'PDF 格式歌譜，高清列印版本',
+    price: 20,
+    type: 'pdf',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    songId: 'song-2-1-6',
+    albumId: 'album-2-1',
     seriesId: 'spiritual-music',
   },
   {
-    id: 'prod-2-2-2',
-    name: '心靈歸家 – 歌譜 PDF',
-    description: '完整歌譜集合',
-    price: 20,
-    type: 'pdf',
-    category: 'PDF 歌譜',
-    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500https://images.unsplash.com/photo-1507838871002-b3d9e41f6520?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1507838871002-b3d9e41f6520?w=500&h=500&fit=cropfit=crop',
-    albumId: 'album-2-2',
+    id: 'prod-2-1-6-mp3',
+    name: '儘管我尚未看見 - 音樂下載',
+    description: 'MP3 格式音樂檔案，即時下載享受',
+    price: 10,
+    type: 'mp3',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-2-1-6',
+    albumId: 'album-2-1',
     seriesId: 'spiritual-music',
   },
 
   // 兒歌系列 - 祈禱仔唱詩歌7
+  // 耶穌愛我
   {
-    id: 'prod-3-1-1',
-    name: '祈禱仔唱詩歌7 歌書及下載碼套裝',
-    description: '實體歌書 + 數碼音樂下載碼',
-    price: 280,
-    type: 'physical',
-    category: '實體專輯',
-    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=500&fit=crop',
-    albumId: 'album-3-1',
-    seriesId: 'childrens-songs',
-  },
-  {
-    id: 'prod-3-1-2',
-    name: '祈禱仔唱詩歌7 – 歌譜 PDF',
-    description: '兒童歌譜，易於學習',
+    id: 'prod-3-1-1-pdf',
+    name: '耶穌愛我 - 歌譜 PDF',
+    description: 'PDF 格式歌譜，兒童版本',
     price: 15,
     type: 'pdf',
-    category: 'PDF 歌譜',
-    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500https://images.unsplash.com/photo-1507838871002-b3d9e41f6520?w=500&h=500&fit=croph=500https://images.unsplash.com/photo-1507838871002-b3d9e41f6520?w=500&h=500&fit=cropfit=crop',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    songId: 'song-3-1-1',
     albumId: 'album-3-1',
     seriesId: 'childrens-songs',
   },
   {
-    id: 'prod-3-1-3',
-    name: '祈禱仔唱詩歌7 – 音樂下載',
-    description: '兒童敬拜音樂，快樂學習',
-    price: 40,
-    type: 'mmo',
-    category: '數碼音檔',
-    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=500&fit=crop',
+    id: 'prod-3-1-1-mp3',
+    name: '耶穌愛我 - 音樂下載',
+    description: 'MP3 格式音樂檔案，兒童版本',
+    price: 8,
+    type: 'mp3',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-3-1-1',
+    albumId: 'album-3-1',
+    seriesId: 'childrens-songs',
+  },
+
+  // 小小羊
+  {
+    id: 'prod-3-1-2-pdf',
+    name: '小小羊 - 歌譜 PDF',
+    description: 'PDF 格式歌譜，兒童版本',
+    price: 15,
+    type: 'pdf',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=500&h=500&fit=crop',
+    songId: 'song-3-1-2',
+    albumId: 'album-3-1',
+    seriesId: 'childrens-songs',
+  },
+  {
+    id: 'prod-3-1-2-mp3',
+    name: '小小羊 - 音樂下載',
+    description: 'MP3 格式音樂檔案，兒童版本',
+    price: 8,
+    type: 'mp3',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&h=500&fit=crop',
+    songId: 'song-3-1-2',
     albumId: 'album-3-1',
     seriesId: 'childrens-songs',
   },
@@ -326,10 +619,19 @@ export function getProductsByAlbumId(albumId: string): Product[] {
   return products.filter(p => p.albumId === albumId);
 }
 
-export function getProductsByType(type: 'physical' | 'pdf' | 'mmo'): Product[] {
+export function getProductsByType(type: 'pdf' | 'mp3'): Product[] {
   return products.filter(p => p.type === type);
 }
 
 export function getProductsBySeriesId(seriesId: string): Product[] {
   return products.filter(p => p.seriesId === seriesId);
+}
+
+export function getProductsBySongId(songId: string): Product[] {
+  return products.filter(p => p.songId === songId);
+}
+
+export function getSongsByAlbumId(albumId: string): Song[] {
+  const album = albums.find(a => a.id === albumId);
+  return album ? album.songs : [];
 }
