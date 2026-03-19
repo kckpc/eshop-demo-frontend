@@ -76,10 +76,16 @@ export default function Home() {
         return 'CD版本';
       case 'physical-score':
         return '歌譜書';
+      case 'physical-merchandise':
+        return '周邊產品';
+      case 'physical-collection':
+        return '合集/USB';
       case 'digital-pdf':
         return 'PDF歌譜';
       case 'digital-mp3':
         return 'MP3音檔';
+      case 'digital-mmo':
+        return 'MMO虛擬卡';
       default:
         return type;
     }
@@ -87,10 +93,21 @@ export default function Home() {
 
   // 獲取商品類型顏色
   const getProductTypeColor = (type: string) => {
-    if (type.startsWith('physical')) {
-      return 'bg-blue-500';
-    } else {
-      return 'bg-green-500';
+    switch (type) {
+      case 'physical-cd':
+      case 'physical-score':
+        return 'bg-blue-500';
+      case 'physical-merchandise':
+      case 'physical-collection':
+        return 'bg-purple-500';
+      case 'digital-pdf':
+        return 'bg-green-500';
+      case 'digital-mp3':
+        return 'bg-amber-500';
+      case 'digital-mmo':
+        return 'bg-pink-500';
+      default:
+        return 'bg-gray-500';
     }
   };
 
