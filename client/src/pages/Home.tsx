@@ -48,14 +48,29 @@ export default function Home() {
       result = result.filter(p => p.category === selectedCategory);
     }
 
-    // 按搜尋查詢篩選 - 支持多維度搜尋
+    // 按搜尋查詢篩選 - 支持多維度搜尋並按相關性排序
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       
-      result = result.filter(p => {
+      // 計算相關性分數
+      const scoreProduct = (p: typeof products[0]) => {
         const productAlbum = albums.find(a => a.id === p.albumId);
+        let score = 0;
         
-        // 粗略匹配商品類型
+        // 完全匹配商品名稱 (+100)
+        if (p.name.toLowerCase() === query) score += 100;
+        // 商品名稱包含搜尋詞 (+50)
+        else if (p.name.toLowerCase().includes(query)) score += 50;
+        
+        // 完全匹配專輯名稱 (+80)
+        if (productAlbum && productAlbum.name.toLowerCase() === query) score += 80;
+        // 專輯名稱包含搜尋詞 (+40)
+        else if (productAlbum && productAlbum.name.toLowerCase().includes(query)) score += 40;
+        
+        // 商品描述包含搜尋詞 (+20)
+        if (p.description.toLowerCase().includes(query)) score += 20;
+        
+        // 商品類型匹配 (+10)
         const typeMatches = (
           (p.type.includes('mp3') && query.includes('mp3')) ||
           (p.type.includes('pdf') && query.includes('pdf')) ||
@@ -64,18 +79,19 @@ export default function Home() {
           (p.type.includes('usb') && query.includes('usb')) ||
           (p.type.includes('merchandise') && query.includes('周邊'))
         );
+        if (typeMatches) score += 10;
         
-        return (
-          // 按商品名稱搜尋
-          p.name.toLowerCase().includes(query) ||
-          // 按商品描述搜尋
-          p.description.toLowerCase().includes(query) ||
-          // 按商品類型搜尋（如 MP3、PDF、伴奏）
-          typeMatches ||
-          // 按專輯名稱搜尋
-          (productAlbum && productAlbum.name.toLowerCase().includes(query))
-        );
-      });
+        return score;
+      };
+      
+      result = result
+        .map(p => ({
+          product: p,
+          score: scoreProduct(p)
+        }))
+        .filter(item => item.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .map(item => item.product);
     }
 
     return result;
