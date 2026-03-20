@@ -48,7 +48,7 @@ export default function Home() {
       result = result.filter(p => p.category === selectedCategory);
     }
 
-    // 按搜尋查詢篩選 - 支持多維度搜尋並按相關性排序
+    // 按搜尋查詢篩選 - 支持多維度搜尋
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       
@@ -57,15 +57,15 @@ export default function Home() {
         const productAlbum = albums.find(a => a.id === p.albumId);
         let score = 0;
         
+        // 完全匹配專輯名稱 - 最高優先級 (+1000)
+        if (productAlbum && productAlbum.name.toLowerCase() === query) score += 1000;
+        // 專輯名稱包含搜尋詞 - 次高優先級 (+500)
+        else if (productAlbum && productAlbum.name.toLowerCase().includes(query)) score += 500;
+        
         // 完全匹配商品名稱 (+100)
         if (p.name.toLowerCase() === query) score += 100;
         // 商品名稱包含搜尋詞 (+50)
         else if (p.name.toLowerCase().includes(query)) score += 50;
-        
-        // 完全匹配專輯名稱 (+80)
-        if (productAlbum && productAlbum.name.toLowerCase() === query) score += 80;
-        // 專輯名稱包含搜尋詞 (+40)
-        else if (productAlbum && productAlbum.name.toLowerCase().includes(query)) score += 40;
         
         // 商品描述包含搜尋詞 (+20)
         if (p.description.toLowerCase().includes(query)) score += 20;
@@ -79,7 +79,7 @@ export default function Home() {
           (p.type.includes('usb') && query.includes('usb')) ||
           (p.type.includes('merchandise') && query.includes('周邊'))
         );
-        if (typeMatches) score += 10;
+        if (typeMatches) score += 500;
         
         return score;
       };
@@ -90,9 +90,44 @@ export default function Home() {
           score: scoreProduct(p)
         }))
         .filter(item => item.score > 0)
-        .sort((a, b) => b.score - a.score)
+        .sort((a, b) => {
+          // 二級排序: 先按相關性分數, 再按商品類型順序
+          if (a.score !== b.score) {
+            return b.score - a.score; // 高分排前
+          }
+          // 相關性分數相同時, 按商品類型順序排序
+          const typeOrder: Record<string, number> = {
+            'cd': 1,
+            'usb': 1,
+            'score-book': 1,
+            'merchandise': 1,
+            'pdf': 2,
+            'mmo': 3,
+            'mp3': 3
+          };
+          const aType = typeOrder[a.product.type] || 99;
+          const bType = typeOrder[b.product.type] || 99;
+          return aType - bType;
+        })
         .map(item => item.product);
     }
+
+    // 全局排序: 按商品類型順序排列 (實體 → PDF → MMO)
+    const typeOrder: Record<string, number> = {
+      'cd': 1,
+      'usb': 1,
+      'score-book': 1,
+      'merchandise': 1,
+      'pdf': 2,
+      'mmo': 3,
+      'mp3': 3
+    };
+    
+    result = result.sort((a, b) => {
+      const aType = typeOrder[a.type] || 99;
+      const bType = typeOrder[b.type] || 99;
+      return aType - bType;
+    });
 
     return result;
   }, [selectedSeries, selectedAlbum, selectedCategory, searchQuery]);
