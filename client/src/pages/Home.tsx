@@ -194,9 +194,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-background">
       {/* 頂部導航 */}
-      <nav className="sticky top-0 z-50 bg-gradient-to-r from-purple-700 to-purple-600 shadow-lg">
+      <nav className="sticky top-0 z-50 bg-primary shadow-lg">
         <div className="container py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="text-2xl font-bold text-white">ESHOP</div>
